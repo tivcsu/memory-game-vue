@@ -1,4 +1,11 @@
 <template>
+  <div class="header">
+    <div class="deck-size">
+      <div class="deck-size__text">Select deck size</div>
+      <input type="number" max="20" min="6" step="2" v-model="deckSize" />
+      <button @click="restartGame">Start new game</button>
+    </div>
+  </div>
   <h1>Memory game</h1>
   <div>Steps: {{ steps }}</div>
   <div class="game-board">
@@ -24,6 +31,7 @@ import Card from "./components/Card.vue";
 const cardList = ref([]);
 const flippedCards = ref([]);
 const steps = ref(0);
+const deckSize = ref(12);
 
 const remainingPairs = computed(
   () => cardList.value.filter((card) => card.isMatched === false).length / 2
@@ -34,36 +42,52 @@ const gameStatus = computed(() =>
     : `Remaining pairs: ${remainingPairs.value}`
 );
 
-const cardValues = [1, 2, 3, 4, 5, 6, 7, 8];
+const cardValues = [
+  "angular",
+  "d3",
+  "jenkins",
+  "postcss",
+  "react",
+  "redux",
+  "sass",
+  "splendex",
+  "ts",
+  "webpack",
+];
 
-cardValues.forEach((value) => {
-  cardList.value.push({
-    position: null,
-    isFlipped: false,
-    value: value,
-    isMatched: false,
-  });
-  cardList.value.push({
-    position: null,
-    isFlipped: false,
-    value: value,
-    isMatched: false,
-  });
-  cardList.value = cardList.value.map((card, index) => {
-    return {
-      ...card,
-      position: index,
-    };
-  });
-});
+const setBoard = () => {
+  for (let i = 0; i < deckSize.value / 2; i++) {
+    cardList.value.push({
+      position: null,
+      isFlipped: false,
+      value: cardValues[i],
+      isMatched: false,
+    });
+    cardList.value.push({
+      position: null,
+      isFlipped: false,
+      value: cardValues[i],
+      isMatched: false,
+    });
+    cardList.value = cardList.value.map((card, index) => {
+      return {
+        ...card,
+        position: index,
+      };
+    });
+  }
+};
+setBoard();
 
 const shuffleCards = () => {
   cardList.value = _.shuffle(cardList.value);
 };
 
 const restartGame = () => {
+  cardList.value.length = 0;
+  steps.value = 0;
+  setBoard();
   shuffleCards();
-
   cardList.value = cardList.value.map((card, index) => {
     return { ...card, isMatched: false, isFlipped: false, position: index };
   });
@@ -125,7 +149,7 @@ watch(
 .game-board {
   display: grid;
   grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px 100px 100px;
   row-gap: 30px;
   column-gap: 30px;
   justify-content: center;

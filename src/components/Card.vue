@@ -1,7 +1,7 @@
 <template>
   <div class="card" @click="flipCard()">
     <div v-if="isFlipped" class="card__side card--front">
-      {{ value }} - {{ cardPosition }}
+      <img :src="`/images/${value}.png`" :alt="value" />
     </div>
     <div v-else class="card__side card--back"></div>
   </div>
@@ -13,7 +13,7 @@ import { defineEmits, defineProps } from "vue";
 const props = defineProps({
   cardPosition: Number,
   isFlipped: Boolean,
-  value: Number,
+  value: String,
   isMatched: Boolean,
 });
 
@@ -33,6 +33,13 @@ const flipCard = () => {
 .card__side {
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+img {
+  position: relative;
+  width: 60%;
 }
 .card--back {
   background-color: blue;
