@@ -124,6 +124,7 @@ const continueGame = () => {
 };
 
 const flipCard = (card) => {
+  if (flippedCards.value.length === 2) return;
   cardList.value[card.cardPosition].isFlipped = true;
 
   if (flippedCards.value[0]) {
