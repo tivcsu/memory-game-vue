@@ -1,18 +1,29 @@
 <template>
   <div class="header">
     <div class="deck-size">
-      <div class="deck-size__text">Select deck size</div>
-      <input type="number" max="20" min="6" step="2" v-model="deckSize" />
+      <div class="deck-size__text">Select deck size:</div>
+      <input
+        class="deck-size__value"
+        type="number"
+        max="20"
+        min="6"
+        step="2"
+        v-model="deckSize"
+      />
       <button @click="newGame">Start new game</button>
       <button v-if="canContinue && !gameStarted" @click="continueGame">
         Continue previous game
       </button>
     </div>
-    <h1>Memory game</h1>
   </div>
+  <h1 v-if="!gameStarted">Memory game</h1>
   <LandingPage v-if="!gameStarted" />
   <div class="game-page" v-else>
-    <div>Steps: {{ steps }}</div>
+    <div class="status-row">
+      <div class="steps">Steps: {{ steps }}</div>
+      <button @click="restartGame">Restart Game</button>
+    </div>
+
     <div class="game-board">
       <Card
         v-for="(card, index) in cardList"
@@ -25,7 +36,6 @@
       />
     </div>
     <div>{{ gameStatus }}</div>
-    <button @click="restartGame">restartGame</button>
   </div>
 </template>
 
@@ -174,7 +184,45 @@ watch(
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: #264653;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 490px;
+  margin: 0 auto 15px;
+}
+
+.deck-size {
+  display: flex;
+  max-width: 490px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.deck-size__text {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.deck-size__value {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .game-board {
@@ -184,6 +232,10 @@ watch(
   column-gap: 30px;
   justify-content: center;
   margin-bottom: 20px;
+}
+.steps {
+  font-weight: 600;
+  font-size: 16px;
 }
 .card {
   width: 100px;

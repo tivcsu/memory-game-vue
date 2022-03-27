@@ -39,17 +39,18 @@ const flipCard = () => {
   width: 100%;
   height: 100%;
   cursor: pointer;
-  border: 2px solid black;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
 }
 img {
   position: relative;
   width: 60%;
 }
 .card--back {
-  background-color: blue;
+  background-color: #ddbea9;
 }
 .matched {
-  border: none;
   cursor: default;
+  box-shadow: none;
 }
 </style>
