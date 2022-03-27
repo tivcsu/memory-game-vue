@@ -1,17 +1,26 @@
 <template>
-  <div class="card" @click="flip()">
-    <div v-if="isFlipped" class="card__side card--front">Card</div>
+  <div class="card" @click="flipCard()">
+    <div v-if="isFlipped" class="card__side card--front">
+      {{ value }} - {{ cardPosition }}
+    </div>
     <div v-else class="card__side card--back"></div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { defineEmits, defineProps } from "vue";
 
-const isFlipped = ref(false);
+const props = defineProps({
+  cardPosition: Number,
+  isFlipped: Boolean,
+  value: Number,
+  isMatched: Boolean,
+});
 
-const flip = () => {
-  isFlipped.value = !isFlipped.value;
+const emit = defineEmits(["flip"]);
+
+const flipCard = () => {
+  emit("flip", props);
 };
 </script>
 
