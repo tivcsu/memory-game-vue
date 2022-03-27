@@ -5,33 +5,38 @@
       <input type="number" max="20" min="6" step="2" v-model="deckSize" />
       <button @click="newGame">Start new game</button>
     </div>
+    <h1>Memory game</h1>
   </div>
-  <h1>Memory game</h1>
-  <div>Steps: {{ steps }}</div>
-  <div class="game-board">
-    <Card
-      v-for="(card, index) in cardList"
-      :key="index"
-      :isFlipped="card.isFlipped"
-      :card-position="card.position"
-      :value="card.value"
-      :isMatched="card.isMatched"
-      @flip="flipCard"
-    />
+  <LandingPage v-if="!gameStarted" />
+  <div class="gamePage" v-else>
+    <div>Steps: {{ steps }}</div>
+    <div class="game-board">
+      <Card
+        v-for="(card, index) in cardList"
+        :key="index"
+        :isFlipped="card.isFlipped"
+        :card-position="card.position"
+        :value="card.value"
+        :isMatched="card.isMatched"
+        @flip="flipCard"
+      />
+    </div>
+    <div>{{ gameStatus }}</div>
+    <button @click="restartGame">restartGame</button>
   </div>
-  <div>{{ gameStatus }}</div>
-  <button @click="restartGame">restartGame</button>
 </template>
 
 <script setup>
 import _ from "lodash";
 import { ref, watch, computed } from "vue";
 import Card from "./components/Card.vue";
+import LandingPage from "./components/LandingPage.vue";
 
 const cardList = ref([]);
 const flippedCards = ref([]);
 const steps = ref(0);
 const deckSize = ref(12);
+const gameStarted = ref(false);
 
 const remainingPairs = computed(
   () => cardList.value.filter((card) => card.isMatched === false).length / 2
@@ -92,6 +97,7 @@ const restartGame = () => {
 };
 
 const newGame = () => {
+  gameStarted.value = true;
   cardList.value.length = 0;
   steps.value = 0;
   setBoard();
