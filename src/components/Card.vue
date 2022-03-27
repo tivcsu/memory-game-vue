@@ -1,6 +1,10 @@
 <template>
   <div class="card" @click="flipCard()">
-    <div v-if="isFlipped" class="card__side card--front">
+    <div
+      v-if="isFlipped"
+      class="card__side card--front"
+      :class="{ matched: isMatched }"
+    >
       <img :src="`/images/${value}.png`" :alt="value" />
     </div>
     <div v-else class="card__side card--back"></div>
@@ -26,9 +30,7 @@ const flipCard = () => {
 
 <style>
 .card {
-  border: 2px solid black;
   position: relative;
-  cursor: pointer;
 }
 .card__side {
   display: flex;
@@ -36,6 +38,8 @@ const flipCard = () => {
   justify-content: center;
   width: 100%;
   height: 100%;
+  cursor: pointer;
+  border: 2px solid black;
 }
 img {
   position: relative;
@@ -43,5 +47,9 @@ img {
 }
 .card--back {
   background-color: blue;
+}
+.matched {
+  border: none;
+  cursor: default;
 }
 </style>

@@ -4,11 +4,14 @@
       <div class="deck-size__text">Select deck size</div>
       <input type="number" max="20" min="6" step="2" v-model="deckSize" />
       <button @click="newGame">Start new game</button>
+      <button v-if="canContinue && !gameStarted" @click="continueGame">
+        Continue previous game
+      </button>
     </div>
     <h1>Memory game</h1>
   </div>
   <LandingPage v-if="!gameStarted" />
-  <div class="gamePage" v-else>
+  <div class="game-page" v-else>
     <div>Steps: {{ steps }}</div>
     <div class="game-board">
       <Card
@@ -46,6 +49,8 @@ const gameStatus = computed(() =>
     ? "You win"
     : `Remaining pairs: ${remainingPairs.value}`
 );
+
+const canContinue = computed(() => !!localStorage.getItem("cardList"));
 
 const cardValues = [
   "angular",
@@ -88,6 +93,11 @@ const shuffleCards = () => {
   cardList.value = _.shuffle(cardList.value);
 };
 
+const getLocalStorage = () => {
+  cardList.value = JSON.parse(localStorage.getItem("cardList"));
+  steps.value = JSON.parse(localStorage.getItem("steps"));
+};
+
 const restartGame = () => {
   shuffleCards();
   steps.value = 0;
@@ -97,6 +107,7 @@ const restartGame = () => {
 };
 
 const newGame = () => {
+  localStorage.removeItem("cardList");
   gameStarted.value = true;
   cardList.value.length = 0;
   steps.value = 0;
@@ -105,6 +116,11 @@ const newGame = () => {
   cardList.value = cardList.value.map((card, index) => {
     return { ...card, isMatched: false, isFlipped: false, position: index };
   });
+};
+
+const continueGame = () => {
+  getLocalStorage();
+  gameStarted.value = true;
 };
 
 const flipCard = (card) => {
@@ -124,13 +140,16 @@ const isMatch = (cardOne, cardTwo) => {
   if (cardOne.value === cardTwo.value) {
     cardList.value[cardOne.cardPosition].isMatched = true;
     cardList.value[cardTwo.cardPosition].isMatched = true;
+    localStorage.setItem("cardList", JSON.stringify(cardList.value));
   } else {
     setTimeout(() => {
       cardList.value[cardOne.cardPosition].isFlipped = false;
       cardList.value[cardTwo.cardPosition].isFlipped = false;
     }, 1000);
   }
+  console.log(canContinue.value);
   steps.value += 1;
+  localStorage.setItem("steps", JSON.stringify(steps.value));
 };
 
 watch(
@@ -163,6 +182,7 @@ watch(
   row-gap: 30px;
   column-gap: 30px;
   justify-content: center;
+  margin-bottom: 20px;
 }
 .card {
   width: 100px;
