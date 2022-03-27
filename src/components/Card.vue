@@ -1,5 +1,5 @@
 <template>
-  <div class="card" @click="flipCard()">
+  <div class="card" @click="!isMatched ? flipCard() : 0">
     <div
       v-if="isFlipped"
       class="card__side card--front"
