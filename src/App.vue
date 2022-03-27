@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <h1>Memory game</h1>
+  <div class="game-board">
+    <Card v-for="card in cardList" :key="card" />
+  </div>
 </template>
 
-<script>
-import HelloWorld from "./components/HelloWorld.vue";
+<script setup>
+import Card from "./components/Card.vue";
 
-export default {
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-};
+const cardList = [];
+
+for (let i = 0; i < 9; i++) {
+  cardList.push(i);
+}
 </script>
 
 <style>
@@ -22,5 +23,17 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.card {
+  border: 2px solid black;
+}
+.game-board {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+  grid-template-rows: 100px 100px 100px;
+  row-gap: 30px;
+  column-gap: 30px;
+  justify-content: center;
 }
 </style>
