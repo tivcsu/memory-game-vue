@@ -3,7 +3,7 @@
     <div class="deck-size">
       <div class="deck-size__text">Select deck size</div>
       <input type="number" max="20" min="6" step="2" v-model="deckSize" />
-      <button @click="restartGame">Start new game</button>
+      <button @click="newGame">Start new game</button>
     </div>
   </div>
   <h1>Memory game</h1>
@@ -84,6 +84,14 @@ const shuffleCards = () => {
 };
 
 const restartGame = () => {
+  shuffleCards();
+  steps.value = 0;
+  cardList.value = cardList.value.map((card, index) => {
+    return { ...card, isMatched: false, isFlipped: false, position: index };
+  });
+};
+
+const newGame = () => {
   cardList.value.length = 0;
   steps.value = 0;
   setBoard();
@@ -143,15 +151,38 @@ watch(
   margin-top: 60px;
 }
 
-.card {
-  border: 2px solid black;
-}
 .game-board {
   display: grid;
   grid-template-columns: 100px 100px 100px 100px;
-  grid-template-rows: 100px 100px 100px 100px 100px;
   row-gap: 30px;
   column-gap: 30px;
   justify-content: center;
+}
+.card {
+  width: 100px;
+  height: 100px;
+}
+@media only screen and (max-width: 600px) {
+  .game-board {
+    grid-template-columns: 100px 100px 100px;
+  }
+  .card {
+    width: 100px;
+    height: 100px;
+  }
+}
+@media only screen and (max-width: 420px) {
+  .game-board {
+    grid-template-columns: 60px 60px;
+  }
+  .card {
+    width: 60px;
+    height: 60px;
+  }
+}
+@media only screen and (max-width: 270px) {
+  .game-board {
+    grid-template-columns: 60px 60px;
+  }
 }
 </style>
